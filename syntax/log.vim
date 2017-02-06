@@ -10,24 +10,40 @@ if exists("b:current_syntax")
   finish
 endif
 
-syn match log_error 	'\c.*\<\(FATAL\|ERROR\|ERRORS\|FAIL\|FAILED\|FAILURE\).*'
-syn match log_warning 	'\c.*\<\(WARNING\|DELETE\|DELETING\|DELETED\|RETRY\|RETRYING\).*'
-syn region log_string 	start=/'/ end=/'/ end=/$/ skip=/\\./
-syn region log_string 	start=/"/ end=/"/ skip=/\\./
-syn match log_number 	'0x[0-9a-fA-F]*\|\[<[0-9a-f]\+>\]\|\<\d[0-9a-fA-F]*'
+syn match log_trace             '\<TRACE\>'
+hi def link log_trace           Type
 
-syn match   log_date '\(Jan\|Feb\|Mar\|Apr\|May\|Jun\|Jul\|Aug\|Sep\|Oct\|Nov\|Dec\) [ 0-9]\d *'
-syn match   log_date '\d\{4}-\d\d-\d\d'
+syn match log_debug             '\<DEBUG\>'
+hi def link log_debug           Function
 
-syn match   log_time '\d\d:\d\d:\d\d\s*'
-syn match   log_time '\c\d\d:\d\d:\d\d\(\.\d\+\)\=\([+-]\d\d:\d\d\|Z\)'
+syn match log_info              '\<INFO\>'
+hi def link log_info            Operator
 
-hi def link log_string 		String
-hi def link log_number 		Number
-hi def link log_date 		Constant
-hi def link log_time 		Type
-hi def link log_error 		ErrorMsg
-hi def link log_warning 	WarningMsg
+syn match log_warning           '\c.*\<\(WARNING\|DELETE\|DELETING\|DELETED\|RETRY\|RETRYING\|WARN\).*'
+hi def link log_warning         WarningMsg
+
+syn match log_error             '\<\(FATAL\|ERROR\|ERRORS\|FAIL\|FAILED\|FAILURE\)\>'
+hi def link log_error           ErrorMsg
+
+syn match log_stacktrace        '^   at.*'
+hi def link log_stacktrace      Tag
+
+
+syn match log_caller            '   \[[A-z]*\]' nextgroup=log_thread
+hi def link log_caller          Exception 
+
+syn match log_thread            '\[\d\{1,3}\]'
+hi def link log_thread          Include
+
+
+syn region log_string           start=/'/ end=/'/ end=/$/ skip=/\\./
+syn region log_string           start=/"/ end=/"/ skip=/\\./
+hi def link log_string          String
+
+syn match   log_date            '^\d\{4}-\d\d-\d\d \d\d:\d\d:\d\d.\d\{4} \@='
+syn match   log_date            '^\d\d:\d\d:\d\d.\d\{3,4} \@='
+syn match   log_date            '^\d\{4}-\d\d-\d\d \d\d:\d\d:\d\d \@='
+hi def link log_date            Constant
 
 
 let b:current_syntax = "log"
